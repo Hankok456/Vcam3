@@ -76,9 +76,9 @@ public class ConfigManager {
     
     public void saveConfig() {
         File configFile = new File(configDir, CONFIG_FILE);
+        savePerAppVideoMap();
         try (FileOutputStream fos = new FileOutputStream(configFile)) {
             properties.store(fos, "VCAM Configuration");
-            savePerAppVideoMap();
             Log.d(TAG, "Config saved to " + configFile.getAbsolutePath());
         } catch (IOException e) {
             Log.e(TAG, "Failed to save config: " + e.getMessage());

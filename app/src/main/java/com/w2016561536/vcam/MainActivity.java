@@ -34,6 +34,7 @@ public class MainActivity extends Activity {
     private Switch show_fps_switch;
     private Switch show_info_switch;
     private Switch mute_audio_switch;
+    private Button repo_button;
     private Button btn_select_video;
     private TextView tv_current_video;
     private EditText et_fps_override;
@@ -85,7 +86,7 @@ public class MainActivity extends Activity {
     }
 
     private void initViews() {
-        Button repo_button = findViewById(R.id.button);
+        repo_button = findViewById(R.id.button);
         force_show_switch = findViewById(R.id.switch1);
         disable_switch = findViewById(R.id.switch2);
         play_sound_switch = findViewById(R.id.switch3);
