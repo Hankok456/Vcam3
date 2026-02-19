@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">VCAM</string>
+    <string name="click_to_go_to_repo">click to go to repository</string>
+    <string name="description">Please go to online repository to check for latest update, latest usgae and report bugs</string>
+    <string name="Warning">DO NOT USE FOR ANY ILLEGAL PURPOSE !!YOU NEED TO TAKE ALL RESPONSIBILITY AND CONSEQUENCE!!</string>
+    <string name="switch1">Force to show permission lack warning</string>
+    <string name="switch2">Disable the module temporarily (On is disable)</string>
+    <string name="switch3">Play sounds of videos</string>
+    <string name="switch4">Force every app use private directory</string>
+    <string name="gitee" translatable="false">Gitee平台（中国大陆更快）</string>
+    <string name="switch5">Disable toast message</string>
+    <string name="switch6">Show FPS counter overlay</string>
+    <string name="switch7">Show device info overlay</string>
+    <string name="switch8">Mute audio output</string>
+    <string name="permission_lack_warn">Missing permissions</string>
+    <string name="permission_description">The permission to access local storage is used to set up configuration files. If refused you need to set up file manually.</string>
+    <string name="positive">Sure</string>
+    <string name="negative">Refuse</string>
+    <string name="video_selection">Select Video</string>
+    <string name="fps_override">FPS Override (0=auto)</string>
+    <string name="loop_delay">Loop Delay (ms)</string>
+    <string name="audio_volume">Audio Volume %d%%</string>
+    <string name="no_videos_found">No videos found in DCIM/Camera1</string>
+    <string name="video_selected">Video: %s</string>
+    <string name="current_video">Current: %s</string>
+</resources>
