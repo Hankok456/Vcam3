@@ -110,7 +110,7 @@ public class VideoToFrames implements Runnable {
             decoder = MediaCodec.createDecoderByType(mime);
             showSupportedColorFormat(decoder.getCodecInfo().getCapabilitiesForType(mime));
             if (play_surf == null) {
-                int targetFormat = MediaCodecInfo.CodecCapabilities.COLOR_FormatYUV420888;
+                int targetFormat = COLOR_FormatYUV420888;
                 if (isColorFormatSupported(targetFormat, decoder.getCodecInfo().getCapabilitiesForType(mime))) {
                     mediaFormat.setInteger(MediaFormat.KEY_COLOR_FORMAT, targetFormat);
                     XposedBridge.log("【VCAM】【decoder】set decode color format to YUV_420_888 (0x21)");
@@ -362,6 +362,43 @@ public class VideoToFrames implements Runnable {
     }
 
 
+    private static byte[] getDataFromYUV420888(Image image) {
+        Rect crop = image.getCropRect();
+        int width = crop.width();
+        int height = crop.height();
+        Image.Plane[] planes = image.getPlanes();
+
+        byte[] nv21 = new byte[width * height * 3 / 2];
+
+        ByteBuffer yBuffer = planes[0].getBuffer();
+        ByteBuffer uvBuffer = planes[1].getBuffer();
+
+        int yRowStride = planes[0].getRowStride();
+        int uvRowStride = planes[1].getRowStride();
+        int uvPixelStride = planes[1].getPixelStride();
+
+        int yIndex = 0;
+        int uvIndex = width * height;
+
+        for (int row = 0; row < height; row++) {
+            int yBufferPos = yRowStride * (crop.top + row) + crop.left;
+            for (int col = 0; col < width; col++) {
+                nv21[yIndex++] = yBuffer.get(yBufferPos + col);
+            }
+        }
+
+        for (int row = 0; row < height / 2; row++) {
+            int uvBufferPos = uvRowStride * (crop.top / 2 + row) + crop.left * uvPixelStride;
+            for (int col = 0; col < width / 2; col++) {
+                byte vu = uvBuffer.get(uvBufferPos + col * uvPixelStride);
+                nv21[uvIndex++] = vu;
+                byte cb = uvBuffer.get(uvBufferPos + col * uvPixelStride + 1);
+                nv21[uvIndex++] = cb;
+            }
+        }
+
+        return nv21;
+    }
 }
 
 enum OutputImageFormat {
@@ -376,43 +413,5 @@ enum OutputImageFormat {
 
     public String toString() {
         return friendlyName;
-    }
-
-    private static byte[] getDataFromYUV420888(Image image) {
-        Rect crop = image.getCropRect();
-        int width = crop.width();
-        int height = crop.height();
-        Image.Plane[] planes = image.getPlanes();
-        
-        byte[] nv21 = new byte[width * height * 3 / 2];
-        
-        ByteBuffer yBuffer = planes[0].getBuffer();
-        ByteBuffer uvBuffer = planes[1].getBuffer();
-        
-        int yRowStride = planes[0].getRowStride();
-        int uvRowStride = planes[1].getRowStride();
-        int uvPixelStride = planes[1].getPixelStride();
-        
-        int yIndex = 0;
-        int uvIndex = width * height;
-        
-        for (int row = 0; row < height; row++) {
-            int yBufferPos = yRowStride * (crop.top + row) + crop.left;
-            for (int col = 0; col < width; col++) {
-                nv21[yIndex++] = yBuffer.get(yBufferPos + col);
-            }
-        }
-        
-        for (int row = 0; row < height / 2; row++) {
-            int uvBufferPos = uvRowStride * (crop.top / 2 + row) + crop.left * uvPixelStride;
-            for (int col = 0; col < width / 2; col++) {
-                int vu = uvBuffer.get(uvBufferPos + col * uvPixelStride);
-                nv21[uvIndex++] = vu;
-                int cb = uvBuffer.get(uvBufferPos + col * uvPixelStride + 1);
-                nv21[uvIndex++] = cb;
-            }
-        }
-        
-        return nv21;
     }
 }
